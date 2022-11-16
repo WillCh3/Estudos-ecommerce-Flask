@@ -1,4 +1,4 @@
-{%  include "base.html" %}
+{% include "includes/base.html" %}
 
 
 
@@ -67,8 +67,8 @@
     </div> 
   </div> 
   <hr>
-  <a href="#" class="btn btn-lg btn-primary text-uppercase"> Comprar agora </a>
-  <a href="#" class="btn btn-lg btn-outline-primary text-uppercase"> <i class="fas fa-shopping-cart"></i> Adicionar no carrinho </a>
+  <a href="/carrinho/" class="btn btn-lg btn-primary text-uppercase"> Comprar agora </a>
+  <a href="/carrinho/{{title}}/{{product[0]}}" class="btn btn-lg btn-outline-primary text-uppercase"> <i class="fas fa-shopping-cart"></i> Adicionar no carrinho </a>
 </article> 
     </aside> 
   </div> 
