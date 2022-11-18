@@ -38,18 +38,29 @@ def login():
         user_loc = cursor.execute( query)
         user= user_loc.fetchone()
         
-        
         if user:
             session['id'] = user[0]
             session['email'] = email
             session['name'] = user[1]
             
-            print(session)
+            # print(session)
             return redirect('/')
     return render_template("/login/login.html", title="Login")
 
-@app.route('/register/')
+
+@app.route('/register/', methods=['GET', 'POST'])
 def register():
+    if request.method == 'POST':
+        fname = request.form['fname']
+        lname = request.form['lname']
+        email = request.form['email']
+        senha = request.form['password']
+        # print(f'\n{fname}\n{lname}\n{email}\n{senha}')
+        conexao, cursor = conectar_banco(banco)
+        res = cursor.execute("INSERT INTO User (fname, lname, email, password) VALUES ( '"+fname+"', '"+lname+"', '"+email+"', '"+senha+"');")
+        fechar_banco(conexao)
+        return render_template("/login/login.html", title="login")
+        
     return render_template("/login/signup.html", title="register")
 
 
@@ -134,8 +145,8 @@ def create():
         item = request.args.to_dict()
         user = session['id']
         item["id_user"] = session['id']
-        print(item)
-        print(user)
+        # print(item)
+        # print(user)
         conexao, cursor = conectar_banco(banco)
         res = cursor.execute(f"""INSERT INTO carrinho ( name, quant, valor, id_user, img_url, tamanho ) VALUES ( :name, :quant, :valor, :id_user, :img_url, :tamanho )""", item)
         fechar_banco(conexao)
@@ -162,10 +173,19 @@ def carrinho():
                             WHERE id_user = {user_id}
                         """)
         envio = itens_cart.fetchall()
-        print(f'envio = {envio}')
-        return render_template("/carrinho/carrinho.html", items = envio, title="Carrinho")
+        # print(f'envio = {envio}')
+
+        total = 0
+
+        for item in envio:
+            total += item[2] * item[3]
+            print(f'quant = {item[2]} -- val {item[3]}')
+        # print(total)
+
+        return render_template("/carrinho/carrinho.html", items = envio, total = total, title="Carrinho")
 
     return render_template("/carrinho/carrinho.html", title="Carrinho")
 
 
-#------------------------------------User ------------------------------------------------------------#
+#------------------------------------carrinho Dados ------------------------------------------------------------#
+
