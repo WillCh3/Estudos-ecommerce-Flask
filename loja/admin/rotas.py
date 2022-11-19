@@ -4,7 +4,7 @@ from loja import app
 from flask import render_template, abort, session, request, url_for, redirect
 
 
-app.secret_key ='!@#Ch3!@#'
+app.secret_key ='!@#matodentro@#'
 
 #-------------- Conectar ao banco--------------------
 banco = 'site.db'
@@ -15,8 +15,10 @@ def conectar_banco(banco):
     return conexao, cursor
 
 def fechar_banco(conexao):
+    print('teste certo')
     conexao.commit()
     conexao.close()
+    
 
 
 
@@ -25,12 +27,12 @@ def home():
     return render_template("/index/index.html", title="Home")
 
 
-@app.route('/login/', methods=['GET', 'POST'])
+@app.route('/login/', methods=['GET','POST'])
 def login():
     if request.method == 'POST':
         session.pop('user_name', '')
-        email = request.form['email']
-        senha = request.form['senha']
+        email = request.form.get('email')
+        senha = request.form.get('senha')
 
     #------------------Query verificar usuario ------------------------------------------------
         conexao, cursor = conectar_banco(banco)
@@ -38,28 +40,29 @@ def login():
         user_loc = cursor.execute( query)
         user= user_loc.fetchone()
         
+        
         if user:
             session['id'] = user[0]
             session['email'] = email
             session['name'] = user[1]
-            
+            fechar_banco(conexao)
             # print(session)
             return redirect('/')
     return render_template("/login/login.html", title="Login")
 
 
-@app.route('/register/', methods=['GET', 'POST'])
+@app.route('/register/', methods=['GET','POST'])
 def register():
     if request.method == 'POST':
-        fname = request.form['fname']
-        lname = request.form['lname']
-        email = request.form['email']
-        senha = request.form['password']
-        # print(f'\n{fname}\n{lname}\n{email}\n{senha}')
+        fname = request.form.get('fname')
+        lname = request.form.get('lname')
+        email = request.form.get('email')
+        senha = request.form.get('password')
+        print(f'\n{fname}\n{lname}\n{email}\n{senha}')
         conexao, cursor = conectar_banco(banco)
-        res = cursor.execute("INSERT INTO User (fname, lname, email, password) VALUES ( '"+fname+"', '"+lname+"', '"+email+"', '"+senha+"');")
+        cursor.execute("INSERT INTO User (fname, lname, email, password) VALUES ( ?, ?, ?, ?);", (fname, lname, email, senha))
         fechar_banco(conexao)
-        return render_template("/login/login.html", title="login")
+        return redirect("/login/")
         
     return render_template("/login/signup.html", title="register")
 
