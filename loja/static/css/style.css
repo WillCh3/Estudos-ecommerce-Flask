@@ -110,3 +110,9 @@ body {
     padding-right: 0px;
     padding-left: 0px;
 }
+
+.btn-info {
+    color: #fff;
+    background-color: #7c7c7c;
+    border-color: #7c7c7c;
+}

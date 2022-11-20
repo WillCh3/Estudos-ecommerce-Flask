@@ -7,7 +7,7 @@ from flask import render_template, abort, session, request, url_for, redirect
 app.secret_key ='!@#matodentro@#'
 
 #-------------- Conectar ao banco--------------------
-banco = 'site.db'
+banco = 'ch3infogames.db'
 
 def conectar_banco(banco):
     conexao = sqlite3.connect(banco)
@@ -78,44 +78,44 @@ def recuperar_senha():
     return render_template("/login/forgot_password.html", title="recuperar senha")
 
 
-@app.route('/produtos/po/')
+@app.route('/produtos/computador/')
 def produtos_po():
     conexao, cursor = conectar_banco(banco)
-    itens = cursor.execute( "SELECT * FROM po")
+    itens = cursor.execute( "SELECT * FROM computador")
     products = itens.fetchall()
     #print(products)
 
-    return render_template("/produtos/list.html", products = products, title="po")
+    return render_template("/produtos/list.html", products = products, title="computador")
 
 
-@app.route('/produtos/graos/')
+@app.route('/produtos/monitor/')
 def produtos_graos():
     conexao, cursor = conectar_banco(banco)
-    itens = cursor.execute( "SELECT * FROM graos")
+    itens = cursor.execute( "SELECT * FROM monitor")
     products = itens.fetchall()
     #print(products)
 
-    return render_template("/produtos/list.html", products = products, title="graos")
+    return render_template("/produtos/list.html", products = products, title="monitor")
 
 
-@app.route('/produtos/capsula/')
+@app.route('/produtos/notebook/')
 def produtos_capsula():
     conexao, cursor = conectar_banco(banco)
-    itens = cursor.execute( "SELECT * FROM capsulas")
+    itens = cursor.execute( "SELECT * FROM notebook")
     products = itens.fetchall()
     #print(products)
 
-    return render_template("/produtos/list.html", products = products, title="capsulas")
+    return render_template("/produtos/list.html", products = products, title="notebook")
 
 
-@app.route('/produtos/soluvel/')
+@app.route('/produtos/placavideo/')
 def produtos_soluvel():
     conexao, cursor = conectar_banco(banco)
-    itens = cursor.execute( "SELECT * FROM soluvel")
+    itens = cursor.execute( "SELECT * FROM placavideo")
     products = itens.fetchall()
     #print(products)
 
-    return render_template("/produtos/list.html", products = products, title="soluvel")
+    return render_template("/produtos/list.html", products = products, title="placavideo")
 
 
 @app.route("/produtos/<product>/<product_id>")
